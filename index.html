@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
+
+  <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+  
+  <title>Frontend Mentor | Todo app</title>
+
+  <!-- external styling -->
+  <link rel="stylesheet" href="stylesdark.css" id="design">
+
+  <!-- external script -->
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <picture class="bgPic">
+    <!-- <img src="images/bg-desktop-dark.jpg" alt="bg pic" id="pic"> -->
+  </picture>
+
+  <div class="alert">
+    <p class="warning"></p>
+  </div>
+
+  <div class="wrapper">
+    <header class="master">
+      <h1 class="hTitle">
+        TODO
+      </h1>
+
+      <span class="theme">
+        <img src="images/icon-sun.svg" alt="light" id="theme">
+      </span>
+    </header>
+
+    <!-- the form input -->
+    <form action="" class="form">
+      <button class="submit" type="submit">
+        <img src="images/icon-check.svg" alt="checked" class="subcheck invisible">
+      </button>
+      <input type="text" class="task" placeholder="Create a new todo...">
+    </form>
+
+    <!-- Displayed task -->
+    <section class="showBox">
+
+      <div class="taskShow">
+        <article class="taskVal">
+          <button class="check" type="button">
+            <img src="images/icon-check.svg" alt="checked" class="checked">
+          </button>
+
+          <p class="text">Hit the gym</p>
+
+          <img src="images/icon-cross.svg" alt="" class="delete">
+        </article>
+
+      </div>
+
+      <div class="currently hide">
+
+      </div>
+
+      <div class="past hide">
+
+      </div>
+
+      <article class="compass">
+
+        <small class="nav">
+          <p class="count locate"><span class="num">3</span> items left</p>
+          
+          <div class="location">
+            <p class="locate cat active" data-id="all">All</p>
+            <p class="locate cat" data-id="active">Active</p>
+            <p class="locate cat" data-id="completed">Completed</p>
+          </div>
+
+          <p class="clear locate invisible">Clear Completed</p>
+        </small>
+
+      </article>
+    </section>
+  </div>
+
+</body>
+</html>

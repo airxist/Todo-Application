@@ -1,0 +1,278 @@
+@font-face {
+    font-family: josebold;
+    src: url(fonts/JosefinSans-Bold.ttf);
+}
+
+@font-face {
+    font-family: josereg;
+    src: url(fonts/JosefinSans-Regular.ttf);
+}
+
+:root {
+    /* typography */
+    --josebold: josebold;
+    --josereg: josereg;
+
+    /* color */
+    --Very-Dark-Blue: hsl(235, 21%, 11%);
+    --Very-Dark-Blue-transparent: hsla(235, 21%, 11%, 0.253);
+    --Very-Dark-Desaturated-Blue: hsl(235, 24%, 19%);
+    --Light-Grayish-Blue: hsl(234, 39%, 85%);
+    --Light-Grayish-Blue-hover: hsl(236, 33%, 92%);
+    --Dark-Grayish-Blue: hsl(234, 11%, 52%);
+    --Very-Dark-Grayish-Blue: hsl(233, 14%, 35%);
+    --Very-Dark-Grayish-Blue: hsl(237, 14%, 26%);
+    --active: rgb(149, 182, 226);
+
+    --Very-Light-Gray: hsl(0, 0%, 98%);
+    --Very-Light-Grayish-Blue: hsl(236, 33%, 92%);
+    --Light-Grayish-Blue: hsl(233, 11%, 84%);
+    --Dark-Grayish-Blue: hsl(236, 9%, 61%);
+    --Very-Dark-Grayish-Blue: hsl(235, 19%, 35%);
+}
+
+html {
+    font-size: 18px;
+    scroll-behavior: smooth;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    transition: .8s .8s;
+    box-sizing: border-box;
+}
+
+body {
+    width: 100%;
+    height: 100vh;
+    background-color: var(--Very-Light-Gray);
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+}
+
+.bgPic {
+    width: 100%;
+    height: 250px;
+    background-image: url(images/bg-desktop-light.jpg);
+    display: block;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: -1;
+}
+
+.bgPic #pic {
+    width: 100%;
+    height: 100%;
+}
+
+.wrapper {
+    width: 90%;
+    max-width: 500px;
+    margin: 55px auto 0 auto;
+}
+
+.master {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.hTitle {
+    color: white;
+    font-family: var(--josebold);
+    letter-spacing: 10px;
+}
+
+.theme {
+    cursor: pointer;
+}
+
+.form, .taskVal {
+    background-color: var(--Very-Light-Gray);
+    padding: 15px 20px;
+    border-radius: 5px;
+    margin-top: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 20px;
+}
+
+.submit, .check {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    border: solid 1px var(--Very-Light-Grayish-Blue);
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.submit:hover {
+    background-color: var(--active);
+    border: none;
+}
+
+.form .task {
+    padding: 2px 10px;
+    font-size: 20px;
+    border: none;
+    outline: none;
+    width: 80%;
+    background-color: transparent;
+    font-family: var(--josereg);
+    color: var(--Very-Dark-Grayish-Blue);
+}
+
+.form .task::placeholder {
+    color: var(--Dark-Grayish-Blue);
+}
+
+.showBox {
+    height: 370px;
+    background-color: var(--Very-Light-Gray);
+    margin-top: 25px;
+    border-radius: 5px;
+    position: relative;
+    box-shadow: 0 0 3px 0 var(--Dark-Grayish-Blue);
+}
+
+.taskShow, .currently, .past {
+    height: calc(100% - 50px);
+    overflow: hidden;
+    overflow-y: scroll;
+}
+
+.taskVal {
+    border-bottom: 1px solid var(--Dark-Grayish-Blue);
+    margin-top: 0;
+    border-radius: 0;
+}
+
+.taskVal .text {
+    color: var(--Very-Dark-Grayish-Blue);
+    font-family: var(--josereg);
+    cursor: pointer
+}
+
+.taskVal .delete {
+    margin-left: auto;
+    cursor: pointer;
+}
+
+.compass {
+    padding: 15px 20px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    border-top: solid 1px var(--Dark-Grayish-Blue);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--Dark-Grayish-Blue);
+    background-color: var(--Very-Light-Gray);
+}
+
+.compass .nav, .compass .location {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+@media screen and (max-width: 425px) {
+    .showBox {
+        height: 500px;
+    }
+    .compass .location {
+        position: absolute;
+        background-color: var(--Very-Dark-Desaturated-Blue);
+        bottom: -110%;
+        width: 100%;
+        padding: 15px 20px;
+        left: 0;
+        justify-content: space-evenly;
+        font-weight: 700;
+    }
+    .form .task, .taskVal .text {
+        font-size: 15px;
+    }   
+
+    .form, .taskVal {
+        gap: 10px;
+    }
+
+    .bgPic {
+        background-image: url(images/bg-mobile-light.jpg);
+    }
+}
+
+.compass .location {
+    gap: 15px;
+    font-family: var(--josereg);
+    background-color: var(--Very-Light-Gray);
+}
+
+.locate {
+    cursor: pointer;
+}
+
+.locate:hover {
+    color: var(--Very-Dark-Grayish-Blue);
+}
+
+.alert {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translate(-50%, -100%) scale(.7);
+    background-color: var(--Very-Dark-Blue-transparent);
+    height: 50px;
+    z-index: 5;
+    display: grid;
+    place-items: center;
+    padding: 0 20px;
+    color: var(--Light-Grayish-Blue);
+    border-radius: 5px;
+    transition: .5s .3s;
+    font-family: var(--josereg);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.good {
+    box-shadow: inset 0 0 20px 0 rgba(144, 238, 144, 0.993);
+    color: rgb(85, 224, 85);
+    transform: translate(-50%, 0) scale(1);
+}
+
+.bad {
+    box-shadow: inset 0 0 20px 0 rgba(231, 77, 77, 0.993);
+    color: rgb(241, 13, 13);
+    transform: translate(-50%, 0) scale(1);
+}
+
+/*** Classes **/
+.done {
+    color: rgb(6, 146, 25);
+    text-decoration: line-through;
+    text-decoration-color: rgb(255, 255, 255);
+    text-decoration-thickness: 2px;
+}
+.active {
+    color: var(--active);
+}
+
+.activebtn {
+    background-color: var(--active);
+}
+
+.invisible {
+    visibility: hidden;
+}
+
+.hide {
+    display: none;
+}
