@@ -11,14 +11,11 @@ const CATEGORY = document.querySelectorAll(".cat");
 const CLEARALL = document.querySelector(".clear");
 const ALERT = document.querySelector(".alert");
 const ALERTTEXT = document.querySelector(".warning");
-const CURRENT = document.querySelector(".currently");
-const PAST = document.querySelector(".past");
 
 // ************* EDIT OPTIONS
 let editId = "";
 let editFlag = false;
 let editItem;
-
 let changeDisplay = false;
 
 // ************ EVENT LISTENERS 
@@ -29,6 +26,7 @@ CATEGORY.forEach(cat => {
     cat.addEventListener("click", activate);
 })
 THEME.addEventListener("click", changedesign);
+window.addEventListener("DOMContentLoaded", showPrevItems)
 
 
 // ************ FUNCTIONS
@@ -51,18 +49,18 @@ function addItem(e) {
     let id = new Date().getTime().toString();
 
     if(todo && !editFlag){
-       showTask(id, todo);
-
+        
+        showTask(id, todo);
         displayAlert("task added", "good");
         bleep();
         eliminate();
         totalTask();
-        addToLocalStorage();
+        addToLocalStorage(id, todo);
         defaultMode();
 
     }
     else if(todo && editFlag){
-
+        // will update this later when we get to add the edit feature
     }
     else {
         displayAlert("please input value", "bad")
@@ -70,6 +68,7 @@ function addItem(e) {
 
 
 }
+
 // display alert function 
 function displayAlert(text, style) {
     ALERTTEXT.textContent = text;
@@ -81,10 +80,12 @@ function displayAlert(text, style) {
         ALERT.classList.remove(`${style}`)
     }, 3000)
 }
+
 // default mode function 
 function defaultMode() {
     VALUE.value = "";
     changeDisplay = false;
+    editId = "";
 }
 
 // function acive button
@@ -112,6 +113,7 @@ function eliminateAll() {
     eliminate();
     LEFTTASK.textContent = 0;
     displayAlert("empty list and storage", "bad");
+    localStorage.clear();
     defaultMode();
 }
 
@@ -128,10 +130,12 @@ function totalTask() {
 //deleting specifice todo
 function deletion(e) {
     elem = e.currentTarget.parentNode;
+    editId = elem.dataset.id;console.log(editId);
     TASKSHOW.removeChild(elem);
     displayAlert("item deleted", "good");
     totalTask();
-    deleteFromLocalStorage();
+    deleteFromLocalStorage(editId);
+    eliminate();
     defaultMode();
 }
 
@@ -157,41 +161,61 @@ function completion(e) {
 
 // function elementing
 function elementing() {
-    elem.classList.toggle("activebtn");
-    elem.nextElementSibling.classList.toggle("done");
+    elem.classList.add("activebtn");
+    elem.nextElementSibling.classList.add("done");
     elemChild = elem.querySelector(".checked");
-    elemChild.classList.toggle("invisible");
-    elem.parentNode.classList.toggle("finished")
+    elemChild.classList.remove("invisible");
+    elem.parentNode.classList.add("finished")
 }
 
 // function to activate current page or session
 function activate(e) {
+    // change class to show what page i am on at the momment
     CATEGORY.forEach(cat => {
         cat.classList.remove("active");
     })
     e.currentTarget.classList.add("active")
 
-
-    // to carry out the filtration
-    // let todos = Array.from(document.querySelectorAll(".taskVal"));
-    let todos = [...document.querySelectorAll(".taskVal")];
     let identity = e.currentTarget.dataset.id;
-    
-    todos.forEach(task => {
-        if(task.classList.contains("finished")) {
+
+    TODOS = TASKSHOW.querySelectorAll(".taskVal");
+    TODOS.forEach(task => {
+        if (task.classList.contains("finished")) {
             changeDisplay = true;
         }
     })
 
-    if(identity == "active" && changeDisplay) {
+    if (identity == "active" && changeDisplay) {
+        todos = TASKSHOW.querySelectorAll(".taskVal");
+        todos.forEach(task => {
+        let taskclass = task.classList;
+        if (taskclass.contains("finished")) {
+            task.classList.add("hide");
+        }
         
-    }else if( identity == "completed") {
+        if (!taskclass.contains("finished")) {
+            task.classList.remove("hide");
+        }
+        })
+    }else if (identity == "completed" && changeDisplay) {
+        todos = TASKSHOW.querySelectorAll(".taskVal");
+        todos.forEach(task => {
+        let taskclass = task.classList;
+        if (taskclass.contains("finished")) {
+            task.classList.remove("hide");
+        }
         
+        if (!taskclass.contains("finished")) {
+            task.classList.add("hide");
+        }
+        })
     }else {
-        
+        todos = TASKSHOW.querySelectorAll(".taskVal");
+        todos.forEach(task => {
+            task.classList.remove("hide");
+        })
     }
 }
-
 
 // function show task
 function showTask(identity, value) {
@@ -219,19 +243,61 @@ function showTask(identity, value) {
     })
 }
 
+// show previous added items
+function showPrevItems() {
+    TODOS = getLocalStorage();
+    TODOS.forEach(task => {
+        TASKSHOW.innerHTML += `
+        <article class="taskVal" data-id="${task.id}">
+            <button class="check" type="button">
+            <img src="images/icon-check.svg" alt="checked" class="checked invisible">
+            </button>
+    
+            <p class="text">${task.todo}</p>
+    
+            <img src="images/icon-cross.svg" alt="" class="delete">
+        </article>`
+
+        const DELBTN = document.querySelectorAll(".delete");
+        const DONE = document.querySelectorAll(".check");
+    
+        // EVENT LISTENERS FOR THE ABOVE
+        DELBTN.forEach(del => {
+            del.addEventListener("click", deletion);
+        })
+        
+        DONE.forEach(tick => {
+            tick.addEventListener("click", completion);
+        })
+
+    })
+    eliminate();
+}
 
 // ************LOCAL STORAGE 
 // add to local storage function
-function addToLocalStorage() {
-    console.log("added to local storage baby");
+function addToLocalStorage(id, todo) {
+    taskList = {id, todo};
+    TODOS = getLocalStorage();
+    TODOS.push(taskList);
+    localStorage.setItem("tasks", JSON.stringify(TODOS))
 }
 
-// fucuntion to clear local Storage
-function clearLocalStorage() {
-    console.log("local storage cleared")
-}
+// fucuntion to clear local Storage will be with the clear all task button;
 
 // function to remove from local storage
-function deleteFromLocalStorage() {
-    console.log("item deleted from local storage");
+function deleteFromLocalStorage(editId) {
+    TODOS = getLocalStorage();
+    TODOS = TODOS.filter(task => {
+        if (editId !== task.id) {
+            return task;
+        }
+    })
+
+    localStorage.setItem("tasks", JSON.stringify(TODOS));
+}
+
+// *************** GET LOCAL STORAGE
+function getLocalStorage() {
+    return localStorage.getItem("tasks") ? JSON.parse(localStorage.getItem("tasks")) : TODOS = [];
 }
